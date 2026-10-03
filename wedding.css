@@ -545,7 +545,25 @@ a {
   filter: drop-shadow(0 0 34px rgba(240, 174, 158, 0.34));
   opacity: 0.68;
   transform: translate(-50%, -50%);
+  animation: fallback-bloom 2.4s cubic-bezier(0.2, 0.75, 0.25, 1) both;
   content: "";
+}
+
+@keyframes fallback-bloom {
+  from {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0.22) rotate(-18deg);
+  }
+
+  68% {
+    opacity: 0.82;
+    transform: translate(-50%, -50%) scale(1.06) rotate(4deg);
+  }
+
+  to {
+    opacity: 0.68;
+    transform: translate(-50%, -50%) scale(1) rotate(0);
+  }
 }
 
 @keyframes dawn-glow {

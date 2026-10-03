@@ -13,14 +13,11 @@ if (navigationEntry?.type === "reload") {
 }
 
 const roseCanvas = document.querySelector("#rose-scene");
-const probeCanvas = document.createElement("canvas");
 
 try {
-  if (!probeCanvas.getContext("webgl2") && !probeCanvas.getContext("webgl")) {
-    throw new Error("WebGL is unavailable");
-  }
   await import("./rose.js");
-} catch {
+} catch (error) {
+  console.error("Rose renderer failed to start.", error);
   document.body.classList.add("webgl-fallback");
   roseCanvas.hidden = true;
 }
