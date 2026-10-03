@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#24141d">
+  <meta name="description" content="Một lời chúc mừng ngày hạnh phúc dành tặng Ngọc Ánh.">
+  <title>Chúc mừng ngày hạnh phúc, Ngọc Ánh</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="./wedding.css">
+  <script type="importmap">
+    {
+      "imports": {
+        "three": "/node_modules/three/build/three.module.js"
+      }
+    }
+  </script>
+  <script type="module" src="./wedding.js"></script>
+</head>
+<body class="wedding-page">
+  <main>
+    <section class="wedding-scene" aria-labelledby="wedding-title">
+      <canvas id="rose-scene" aria-label="Hoa hồng pha lê đang nở, tỏa ánh hồng và champagne"></canvas>
+      <div class="wedding-scene__veil" aria-hidden="true"></div>
+      <div class="wedding-scene__grain" aria-hidden="true"></div>
+      <div class="wedding-scene__petals" aria-hidden="true"></div>
+
+      <div class="wedding__copy">
+        <div class="wedding__ornament" aria-hidden="true">
+          <span class="wedding__rule"></span>
+          <span class="wedding__rings"><i></i><i></i></span>
+          <span class="wedding__rule"></span>
+        </div>
+        <p class="wedding__eyebrow">MỘT NGÀY ĐẶC BIỆT</p>
+        <h1 id="wedding-title">Chúc mừng ngày<br>hạnh phúc,<br><span>Ngọc Ánh</span></h1>
+        <p class="wedding__lead">Mong yêu thương luôn nở hoa trên hành trình mới.</p>
+        <a class="wedding__read" href="#loi-chuc">Đọc lời chúc <span aria-hidden="true">↓</span></a>
+      </div>
+
+      <p class="wedding__caption" aria-hidden="true">WITH LOVE, FOR YOUR HAPPIEST DAY</p>
+      <a class="wedding__scroll" href="#loi-chuc" aria-label="Cuộn đến lời chúc"><span></span></a>
+    </section>
+
+    <section class="wedding-letter" id="loi-chuc" aria-labelledby="letter-title">
+      <div class="wedding-letter__inner">
+        <p class="wedding-letter__eyebrow">GỬI NGỌC ÁNH</p>
+        <h2 id="letter-title">Một khởi đầu<br><em>ngập tràn yêu thương</em></h2>
+        <div class="wedding-letter__divider" aria-hidden="true"><span></span><i>✦</i><span></span></div>
+        <p class="wedding-letter__message">Chúc Ngọc Ánh bước vào hành trình mới với thật nhiều yêu thương, thấu hiểu và tiếng cười. Mong hai bạn luôn nắm tay nhau qua mọi mùa của cuộc sống, cùng vun đắp một mái ấm bình yên và ngập tràn hạnh phúc. Chúc mừng ngày trọng đại!</p>
+        <p class="wedding-letter__signoff">Gửi bằng thật nhiều yêu thương</p>
+        <button class="wedding__share" type="button">
+          <span class="wedding__share-icon" aria-hidden="true">↗</span>
+          Chia sẻ thiệp
+        </button>
+        <p class="wedding__status" aria-live="polite"></p>
+      </div>
+    </section>
+  </main>
+</body>
+</html>

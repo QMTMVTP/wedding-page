@@ -1,0 +1,555 @@
+:root {
+  color-scheme: dark;
+  --ink: #24141d;
+  --wine: #713b50;
+  --rose: #d78d91;
+  --blush: #f5ded3;
+  --champagne: #e8c992;
+  --leaf: #75836a;
+  --paper: #f3e9dc;
+  --display: "Cormorant Garamond", "Iowan Old Style", Georgia, serif;
+  --body: "DM Sans", "Segoe UI", sans-serif;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  min-width: 320px;
+  scroll-behavior: smooth;
+}
+
+body {
+  min-width: 320px;
+  margin: 0;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--body);
+}
+
+button,
+a {
+  -webkit-tap-highlight-color: transparent;
+}
+
+.wedding-scene {
+  position: relative;
+  min-height: 100svh;
+  overflow: hidden;
+  isolation: isolate;
+  background:
+    radial-gradient(ellipse at 73% 45%, rgba(160, 91, 104, 0.35), transparent 35%),
+    radial-gradient(ellipse at 15% 95%, rgba(130, 88, 76, 0.42), transparent 39%),
+    linear-gradient(148deg, #21131c 2%, #3b202d 48%, #704451 100%);
+}
+
+.wedding-scene::before {
+  position: absolute;
+  z-index: 0;
+  inset: 0;
+  background: radial-gradient(ellipse at 73% 57%, rgba(238, 190, 151, 0.35), transparent 46%);
+  content: "";
+  opacity: 0;
+  pointer-events: none;
+  animation: dawn-glow 6s 0.2s ease-out forwards;
+}
+
+#rose-scene {
+  position: absolute;
+  inset: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+.wedding-scene__veil,
+.wedding-scene__grain {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.wedding-scene__veil {
+  z-index: 1;
+  background:
+    linear-gradient(90deg, rgba(30, 17, 25, 0.92) 0%, rgba(42, 24, 32, 0.76) 34%, rgba(55, 30, 40, 0.08) 73%),
+    linear-gradient(0deg, rgba(28, 16, 24, 0.45), transparent 28%, transparent 78%, rgba(25, 15, 22, 0.2));
+}
+
+.wedding-scene__grain {
+  z-index: 2;
+  opacity: 0.12;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.92' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.22'/%3E%3C/svg%3E");
+  mix-blend-mode: screen;
+}
+
+.wedding-scene__petals {
+  position: absolute;
+  z-index: 2;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.wedding-petal {
+  position: absolute;
+  top: -8%;
+  left: var(--left);
+  width: var(--size);
+  height: calc(var(--size) * 0.58);
+  border-radius: 100% 0 100% 0;
+  background: linear-gradient(135deg, rgba(250, 226, 212, 0.82), rgba(198, 117, 131, 0.66));
+  opacity: 0;
+  filter: drop-shadow(0 0 8px rgba(236, 190, 163, 0.3));
+  animation: petal-drift var(--duration) var(--delay) linear infinite;
+}
+
+.wedding__copy {
+  position: absolute;
+  z-index: 3;
+  top: 50%;
+  left: clamp(32px, 9vw, 150px);
+  width: min(510px, 43vw);
+  transform: translateY(-48%);
+  color: #fff3e9;
+  animation: copy-arrive 0.9s 0.2s both;
+}
+
+.wedding__ornament {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  width: 176px;
+  margin-bottom: 23px;
+  color: var(--champagne);
+}
+
+.wedding__rule {
+  height: 1px;
+  flex: 1;
+  background: linear-gradient(90deg, transparent, currentColor);
+  opacity: 0.82;
+}
+
+.wedding__rule:last-child {
+  transform: rotate(180deg);
+}
+
+.wedding__rings {
+  position: relative;
+  display: block;
+  width: 29px;
+  height: 19px;
+}
+
+.wedding__rings i {
+  position: absolute;
+  top: 2px;
+  width: 15px;
+  height: 15px;
+  border: 1px solid currentColor;
+  border-radius: 50%;
+}
+
+.wedding__rings i:first-child {
+  left: 1px;
+}
+
+.wedding__rings i:last-child {
+  right: 1px;
+}
+
+.wedding__eyebrow,
+.wedding-letter__eyebrow {
+  margin: 0 0 16px;
+  color: var(--champagne);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 2.5px;
+}
+
+.wedding__copy h1 {
+  margin: 0;
+  font-family: var(--display);
+  font-size: clamp(48px, 5.1vw, 74px);
+  font-weight: 400;
+  line-height: 0.91;
+}
+
+.wedding__copy h1 span {
+  display: inline-block;
+  margin-top: 10px;
+  color: #f0c99e;
+  font-size: 1.24em;
+  font-weight: 500;
+  font-style: italic;
+}
+
+.wedding__lead {
+  max-width: 350px;
+  margin: 22px 0 0;
+  color: rgba(255, 243, 233, 0.82);
+  font-size: 15px;
+  line-height: 1.7;
+  animation: copy-arrive 0.8s 0.55s both;
+}
+
+.wedding__read {
+  display: inline-flex;
+  align-items: center;
+  gap: 14px;
+  margin-top: 27px;
+  padding: 11px 0;
+  color: var(--champagne);
+  font-size: 12px;
+  font-weight: 600;
+  text-decoration: none;
+  animation: copy-arrive 0.8s 0.8s both;
+}
+
+.wedding__read span {
+  display: grid;
+  width: 27px;
+  height: 27px;
+  place-items: center;
+  border: 1px solid rgba(232, 201, 146, 0.55);
+  border-radius: 50%;
+  font-size: 16px;
+  transition: transform 180ms ease, background 180ms ease;
+}
+
+.wedding__read:hover span {
+  transform: translateY(3px);
+  background: rgba(232, 201, 146, 0.12);
+}
+
+.wedding__caption {
+  position: absolute;
+  z-index: 3;
+  right: 34px;
+  bottom: 29px;
+  margin: 0;
+  color: rgba(255, 239, 224, 0.58);
+  font-size: 9px;
+  letter-spacing: 2px;
+}
+
+.wedding__scroll {
+  position: absolute;
+  z-index: 3;
+  bottom: 28px;
+  left: 50%;
+  width: 20px;
+  height: 32px;
+  border: 1px solid rgba(245, 222, 211, 0.58);
+  border-radius: 12px;
+  transform: translateX(-50%);
+}
+
+.wedding__scroll span {
+  position: absolute;
+  top: 6px;
+  left: 8px;
+  width: 2px;
+  height: 6px;
+  border-radius: 2px;
+  background: var(--blush);
+  animation: scroll-hint 1.8s ease-in-out infinite;
+}
+
+.wedding-letter {
+  position: relative;
+  display: grid;
+  min-height: 590px;
+  padding: 100px 24px 94px;
+  place-items: center;
+  overflow: hidden;
+  background:
+    radial-gradient(ellipse at 50% 0%, rgba(222, 174, 157, 0.38), transparent 55%),
+    linear-gradient(180deg, #ead7cd, #f5eadf 52%, #e9ddd0);
+  text-align: center;
+}
+
+.wedding-letter::before,
+.wedding-letter::after {
+  position: absolute;
+  width: 210px;
+  height: 210px;
+  border: 1px solid rgba(113, 59, 80, 0.12);
+  border-radius: 50%;
+  content: "";
+  pointer-events: none;
+}
+
+.wedding-letter::before {
+  top: -125px;
+  left: -75px;
+}
+
+.wedding-letter::after {
+  right: -75px;
+  bottom: -140px;
+  width: 290px;
+  height: 290px;
+}
+
+.wedding-letter__inner {
+  width: min(100%, 660px);
+}
+
+.wedding-letter__eyebrow {
+  margin-bottom: 18px;
+  color: var(--wine);
+}
+
+.wedding-letter h2 {
+  margin: 0;
+  color: #432432;
+  font-family: var(--display);
+  font-size: clamp(42px, 5vw, 62px);
+  font-weight: 500;
+  line-height: 0.98;
+}
+
+.wedding-letter h2 em {
+  color: #9c5968;
+  font-weight: 400;
+}
+
+.wedding-letter__divider {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 11px;
+  margin: 27px auto 22px;
+  color: #b28559;
+}
+
+.wedding-letter__divider span {
+  width: 38px;
+  height: 1px;
+  background: currentColor;
+  opacity: 0.65;
+}
+
+.wedding-letter__divider i {
+  font-size: 12px;
+  font-style: normal;
+}
+
+.wedding-letter__message {
+  max-width: 590px;
+  margin: 0 auto;
+  color: #493843;
+  font-family: var(--display);
+  font-size: 23px;
+  line-height: 1.48;
+}
+
+.wedding-letter__signoff {
+  margin: 23px 0 22px;
+  color: #875266;
+  font-family: var(--display);
+  font-size: 22px;
+  font-style: italic;
+}
+
+.wedding__share {
+  display: inline-flex;
+  min-height: 44px;
+  align-items: center;
+  gap: 10px;
+  padding: 0 17px;
+  border: 1px solid rgba(113, 59, 80, 0.45);
+  border-radius: 2px;
+  background: transparent;
+  color: #572e40;
+  cursor: pointer;
+  font: 600 12px var(--body);
+  transition: color 180ms ease, background 180ms ease;
+}
+
+.wedding__share:hover {
+  background: #572e40;
+  color: #fff3e9;
+}
+
+.wedding__share-icon {
+  font-size: 16px;
+  line-height: 1;
+}
+
+.wedding__status {
+  min-height: 18px;
+  margin: 10px 0 0;
+  color: #5d6a51;
+  font-size: 12px;
+}
+
+@keyframes copy-arrive {
+  from {
+    opacity: 0;
+    translate: 0 14px;
+  }
+  to {
+    opacity: 1;
+    translate: 0 0;
+  }
+}
+
+@keyframes petal-drift {
+  0% {
+    opacity: 0;
+    transform: translate3d(0, -8vh, 0) rotate(0deg);
+  }
+  12% {
+    opacity: 0.66;
+  }
+  85% {
+    opacity: 0.5;
+  }
+  100% {
+    opacity: 0;
+    transform: translate3d(var(--drift), 112vh, 0) rotate(420deg);
+  }
+}
+
+@keyframes scroll-hint {
+  50% {
+    transform: translateY(6px);
+    opacity: 0.4;
+  }
+}
+
+@media (max-width: 700px) {
+  .wedding-scene {
+    min-height: max(700px, 100svh);
+  }
+
+  .wedding-scene__veil {
+    background:
+      linear-gradient(180deg, rgba(31, 18, 26, 0.32), rgba(39, 21, 30, 0.04) 38%, rgba(34, 18, 27, 0.18) 70%, rgba(30, 17, 25, 0.8)),
+      linear-gradient(90deg, rgba(33, 19, 28, 0.18), transparent 70%);
+  }
+
+  .webgl-fallback .wedding-scene::after {
+    top: 64%;
+    left: 50%;
+    width: min(70vw, 310px);
+  }
+
+  .wedding__copy {
+    top: 8%;
+    left: 50%;
+    width: min(88%, 430px);
+    transform: translateX(-50%);
+    text-align: center;
+  }
+
+  .wedding__ornament {
+    width: 142px;
+    margin: 0 auto 14px;
+  }
+
+  .wedding__eyebrow {
+    margin-bottom: 11px;
+    font-size: 10px;
+    letter-spacing: 2px;
+  }
+
+  .wedding__copy h1 {
+    font-size: 45px;
+    line-height: 0.88;
+  }
+
+  .wedding__copy h1 span {
+    margin-top: 7px;
+    font-size: 1.2em;
+  }
+
+  .wedding__lead {
+    max-width: 285px;
+    margin: 14px auto 0;
+    font-size: 13px;
+  }
+
+  .wedding__read {
+    margin-top: 11px;
+    padding: 7px 0;
+  }
+
+  .wedding__caption {
+    right: 18px;
+    bottom: 20px;
+    font-size: 8px;
+    letter-spacing: 1.4px;
+  }
+
+  .wedding__scroll {
+    bottom: 15px;
+    left: 22px;
+    transform: none;
+  }
+
+  .wedding-letter {
+    min-height: 620px;
+    padding: 84px 24px 76px;
+  }
+
+  .wedding-letter__message {
+    max-width: 440px;
+    font-size: 21px;
+  }
+}
+
+@media (max-width: 380px) {
+  .wedding__copy h1 {
+    font-size: 40px;
+  }
+
+  .wedding__lead {
+    font-size: 12px;
+  }
+
+  .wedding-letter__message {
+    font-size: 20px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+.webgl-fallback .wedding-scene::after {
+  position: absolute;
+  z-index: 0;
+  top: 43%;
+  left: 72%;
+  width: min(34vw, 330px);
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background:
+    radial-gradient(ellipse at 50% 50%, #f0c28e 0 8%, transparent 9%),
+    repeating-conic-gradient(from 8deg, rgba(234, 151, 159, 0.8) 0deg 15deg, transparent 17deg 45deg);
+  filter: drop-shadow(0 0 34px rgba(240, 174, 158, 0.34));
+  opacity: 0.68;
+  transform: translate(-50%, -50%);
+  content: "";
+}
+
+@keyframes dawn-glow {
+  to {
+    opacity: 1;
+  }
+}
