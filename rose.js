@@ -13,7 +13,8 @@ const renderer = new THREE.WebGLRenderer({
   antialias: true,
   powerPreference: "high-performance",
 });
-renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 1.65));
+const isSmallScreen = window.matchMedia("(max-width: 700px)").matches;
+renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, isSmallScreen ? 1.2 : 1.5));
 renderer.outputColorSpace = THREE.SRGBColorSpace;
 renderer.toneMapping = THREE.ACESFilmicToneMapping;
 renderer.toneMappingExposure = 1.08;
@@ -56,6 +57,12 @@ const petalMaterial = new THREE.MeshPhysicalMaterial({
   clearcoatRoughness: 0.38,
 });
 
+const petalColors = {
+  cream: new THREE.Color(isWeddingPage ? 0xfceee7 : 0xffefe7),
+  blush: new THREE.Color(isWeddingPage ? 0xf5c4cf : 0xf9d2dc),
+  rose: new THREE.Color(isWeddingPage ? 0xd67f99 : 0xe09bb0),
+};
+
 const petalEdgeMaterial = new THREE.MeshBasicMaterial({
   color: isWeddingPage ? 0xffe8ee : 0xffedf3,
   transparent: true,
@@ -65,11 +72,12 @@ const petalEdgeMaterial = new THREE.MeshBasicMaterial({
 });
 
 function createPetalGeometry(length, width, cup, hueShift = 0) {
-  const alongSegments = 44;
-  const acrossSegments = 30;
+  const alongSegments = 32;
+  const acrossSegments = 22;
   const positions = [];
   const colors = [];
   const indices = [];
+  const mixedColor = new THREE.Color();
 
   for (let row = 0; row <= alongSegments; row += 1) {
     const u = row / alongSegments;
@@ -99,16 +107,13 @@ function createPetalGeometry(length, width, cup, hueShift = 0) {
 
       const edge = Math.abs(v) ** 1.8;
       const tip = Math.max(0, (u - 0.8) / 0.2);
-      const cream = new THREE.Color(isWeddingPage ? 0xfceee7 : 0xffefe7);
-      const blush = new THREE.Color(isWeddingPage ? 0xf5c4cf : 0xf9d2dc);
-      const rose = new THREE.Color(isWeddingPage ? 0xd67f99 : 0xe09bb0);
-      const base = rose.clone().lerp(blush, 0.5 + ridge * 0.32);
-      base.lerp(cream, Math.min(0.68, edge * 0.48 + tip * 0.2 + (1 - u) * 0.16));
+      mixedColor.copy(petalColors.rose).lerp(petalColors.blush, 0.5 + ridge * 0.32);
+      mixedColor.lerp(petalColors.cream, Math.min(0.68, edge * 0.48 + tip * 0.2 + (1 - u) * 0.16));
       const shimmer = 0.96 + ridge * 0.12 + (1 - u) * 0.05;
       const veinShade = 1 - Math.max(0, Math.cos(v * Math.PI * 6)) * 0.02 * Math.sin(u * Math.PI);
-      const r = Math.min(1, Math.max(0.18, base.r * shimmer * veinShade + hueShift * 0.008));
-      const g = Math.min(1, Math.max(0.14, base.g * shimmer * veinShade));
-      const b = Math.min(1, Math.max(0.18, base.b * shimmer * veinShade + hueShift * 0.008));
+      const r = Math.min(1, Math.max(0.18, mixedColor.r * shimmer * veinShade + hueShift * 0.008));
+      const g = Math.min(1, Math.max(0.14, mixedColor.g * shimmer * veinShade));
+      const b = Math.min(1, Math.max(0.18, mixedColor.b * shimmer * veinShade + hueShift * 0.008));
       colors.push(r, g, b);
     }
   }
@@ -194,8 +199,6 @@ for (let ringIndex = petalRings.length - 1; ringIndex >= 0; ringIndex -= 1) {
 
     const geometry = createPetalGeometry(ring.length, ring.width, ring.cup, index % 3);
     const mesh = new THREE.Mesh(geometry, petalMaterial);
-    mesh.castShadow = true;
-    mesh.receiveShadow = true;
     petal.add(mesh);
     petal.scale.setScalar(0.15 + ringIndex * 0.012);
     petals.push({
@@ -203,9 +206,11 @@ for (let ringIndex = petalRings.length - 1; ringIndex >= 0; ringIndex -= 1) {
       angle,
       baseRotationZ: petal.rotation.z,
       baseRotationX: petal.rotation.x,
+      baseRotationY: petal.rotation.y,
       ringIndex,
       phase: Math.random() * Math.PI * 2,
-      openDelay: (4 - ringIndex) * 0.09,
+      openDelay: (petalRings.length - 1 - ringIndex) * 0.12,
+      closedCurl: ringIndex === 0 ? 0.28 : ringIndex === 1 ? 0.16 : 0.08,
     });
     rose.add(petal);
   }
@@ -286,7 +291,7 @@ rose.add(bloom);
 
 const particles = [];
 const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
-const particleCount = reducedMotion.matches ? 28 : (window.innerWidth < 700 ? 82 : 150);
+const particleCount = reducedMotion.matches ? 24 : (isSmallScreen ? 48 : 110);
 const particlePositions = new Float32Array(particleCount * 3);
 const particleColors = new Float32Array(particleCount * 3);
 const particleSizes = new Float32Array(particleCount);
@@ -375,14 +380,15 @@ function animate() {
     const sway = Math.sin(time * 1.15 + petal.phase + petal.ringIndex * 0.7);
     const opening = reducedMotion.matches
       ? 1
-      : Math.min(1, Math.max(0, (elapsed - petal.openDelay) / 2.2));
+      : Math.min(1, Math.max(0, (elapsed - petal.openDelay) / 2.6));
     const easedOpening = opening * opening * (3 - 2 * opening);
     petal.group.rotation.z = petal.baseRotationZ + sway * 0.012;
     petal.group.rotation.x = petal.baseRotationX + Math.sin(time * 0.82 + petal.phase) * 0.025;
+    petal.group.rotation.y = petal.baseRotationY + (1 - easedOpening) * petal.closedCurl;
     petal.group.scale.set(
-      0.12 + easedOpening * (0.88 + sway * 0.008),
-      0.12 + easedOpening * (0.88 + sway * 0.014),
-      0.12 + easedOpening * 0.88,
+      0.34 + easedOpening * (0.66 + sway * 0.008),
+      0.34 + easedOpening * (0.66 + sway * 0.014),
+      0.34 + easedOpening * 0.66,
     );
   }
 
@@ -406,6 +412,14 @@ function animate() {
 }
 
 window.addEventListener("resize", resize, { passive: true });
+window.addEventListener("rose:replay", () => {
+  activeElapsed = 0;
+  clock.start();
+  if (!document.hidden) {
+    cancelAnimationFrame(animationFrame);
+    animate();
+  }
+});
 document.addEventListener("visibilitychange", () => {
   if (document.hidden) {
     cancelAnimationFrame(animationFrame);

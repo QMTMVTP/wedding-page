@@ -1,3 +1,17 @@
+const navigationEntry = performance.getEntriesByType("navigation")[0];
+
+if (navigationEntry?.type === "reload") {
+  history.scrollRestoration = "manual";
+
+  if (window.location.hash) {
+    history.replaceState(history.state, "", `${window.location.pathname}${window.location.search}`);
+  }
+
+  window.addEventListener("pageshow", () => {
+    window.scrollTo({ top: 0, left: 0, behavior: "instant" });
+  }, { once: true });
+}
+
 const roseCanvas = document.querySelector("#rose-scene");
 const probeCanvas = document.createElement("canvas");
 
@@ -9,6 +23,30 @@ try {
 } catch {
   document.body.classList.add("webgl-fallback");
   roseCanvas.hidden = true;
+}
+
+const heroScene = document.querySelector(".wedding-scene");
+let lastScrollY = window.scrollY;
+let lastScrollDirection = 0;
+let heroIsVisible = false;
+
+window.addEventListener("scroll", () => {
+  const currentScrollY = window.scrollY;
+  if (currentScrollY !== lastScrollY) {
+    lastScrollDirection = currentScrollY < lastScrollY ? -1 : 1;
+    lastScrollY = currentScrollY;
+  }
+}, { passive: true });
+
+if (heroScene && "IntersectionObserver" in window) {
+  const heroObserver = new IntersectionObserver(([entry]) => {
+    const isVisible = entry.isIntersecting && entry.intersectionRatio >= 0.25;
+    if (isVisible && !heroIsVisible && lastScrollDirection < 0) {
+      window.dispatchEvent(new Event("rose:replay"));
+    }
+    heroIsVisible = isVisible;
+  }, { threshold: [0, 0.25] });
+  heroObserver.observe(heroScene);
 }
 
 const petalField = document.querySelector(".wedding-scene__petals");
